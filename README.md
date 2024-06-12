@@ -54,7 +54,7 @@
 `
 poetry install
 
-`  
+`
 
 ## Scraping Site List
 
