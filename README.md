@@ -1,4 +1,4 @@
-# 협업 사이드 프로젝트
+# 키워드 기반 뉴스 모음 사이트
 ![GitHub Created At](https://img.shields.io/github/created-at/JoonHoSeong/Collabonate-SideProject)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/JoonHoSeong/Collabonate-SideProject)
 ![GitHub last commit](https://img.shields.io/github/last-commit/JoonHoSeong/Collabonate-SideProject)
@@ -53,11 +53,18 @@
 3. Install Dependancy  
 `
 poetry install
-`
+`  
 
+작성 예정
+
+## Rule
+### [바로가기 Link](https://github.com/JoonHoSeong/Collabonate-SideProject/issues/2)
+
+## Flow Chart & Use Case
+작성 예정
 ## Scraping Site List
-
+작성 예정
 ## Folder Structure
-
+작성 예정
 ## API List
-
+작성 예정
