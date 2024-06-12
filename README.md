@@ -53,7 +53,6 @@
 3. Install Dependancy  
 `
 poetry install
-
 `
 
 ## Scraping Site List
