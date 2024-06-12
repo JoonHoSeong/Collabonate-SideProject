@@ -8,6 +8,10 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 ipykernel = "^6.29.4"
+django = "^5.0.6"
+flask = "^3.0.3"
+sqlalchemy = "^2.0.30"
+fastapi = "^0.111.0"
 
 
 [build-system]
