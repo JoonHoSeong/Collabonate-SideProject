@@ -16,13 +16,15 @@
 ![sqlalchemy](https://img.shields.io/badge/sqlalchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)
 ![poetry](https://img.shields.io/badge/poetry-60A5FA?style=for-the-badge&logo=poetry&logoColor=white)
 ![python](https://img.shields.io/badge/python-1D9FD7?style=for-the-badge&logo=python&logoColor=white)
-![Faker](https://img.shields.io/badge/Faker-3B66BC?style=for-the-badge&logo=&logoColor=white)
 ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
+![Selenium](https://img.shields.io/badge/-selenium-%43B02A?style=for-the-badge&logo=selenium&logoColor=white)
+
+
 
 ## Collaborator
-|[<img src="https://avatars.githubusercontent.com/u/87454608?v=4" width="100">](https://github.com/JoonHoSeong)|[<img src="https://avatars.githubusercontent.com/u/164486991?v=4" width="100">]([dayeonkimm](https://github.com/dayeonkimm))|[<img src="https://avatars.githubusercontent.com/u/84219820?v=4" width="100">](https://github.com/LSY310)|[<img src="https://avatars.githubusercontent.com/u/164475356?v=4" width="100">](https://github.com/NohSungwoo)|[<img src="https://avatars.githubusercontent.com/u/164370715?v=4" width="100">](https://github.com/Moon-Nights)|
-|---------------------------------------|---------------------------------------|---------------------------------------|---------------------------------------|---------------------------------------|
-|[JoonHoSeong](https://github.com/JoonHoSeong)|[dayeonkimm](https://github.com/dayeonkimm)|[LIM0310](https://github.com/LSY310)|[NohSungwoo](https://github.com/NohSungwoo)|[YeongJoong Seok](https://github.com/Moon-Nights)|
+|[<img src="https://avatars.githubusercontent.com/u/87454608?v=4" width="100">](https://github.com/JoonHoSeong)|[<img src="https://avatars.githubusercontent.com/u/164486991?v=4" width="100">]([dayeonkimm](https://github.com/dayeonkimm))|[<img src="https://avatars.githubusercontent.com/u/84219820?v=4" width="100">](https://github.com/LSY310)|[<img src="https://avatars.githubusercontent.com/u/164475356?v=4" width="100">](https://github.com/NohSungwoo)|[<img src="https://avatars.githubusercontent.com/u/164370715?v=4" width="100">](https://github.com/Moon-Nights)|[<img src="https://avatars.githubusercontent.com/u/164474193?v=4" width="100">](https://github.com/siangit)|
+|---------------------------------------|---------------------------------------|---------------------------------------|---------------------------------------|---------------------------------------|---------------------------------------|
+|[JoonHoSeong](https://github.com/JoonHoSeong)|[dayeonkimm](https://github.com/dayeonkimm)|[LIM0310](https://github.com/LSY310)|[NohSungwoo](https://github.com/NohSungwoo)|[YeongJoong Seok](https://github.com/Moon-Nights)|[SIANNI](https://github.com/siangit)|
 
 ## 주제
 각 분야별 뉴스를 모아 분야별, 키워드별 뉴스를 제공해주는 사이트
