@@ -5,7 +5,7 @@ dataAnalysis/Data
 
 # Custom
 **/*.ipynb
-
+#test
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,django,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,django,python
