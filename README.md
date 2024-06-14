@@ -26,6 +26,8 @@
 |---------------------------------------|---------------------------------------|---------------------------------------|---------------------------------------|---------------------------------------|---------------------------------------|
 |[JoonHoSeong](https://github.com/JoonHoSeong)|[dayeonkimm](https://github.com/dayeonkimm)|[LIM0310](https://github.com/LSY310)|[NohSungwoo](https://github.com/NohSungwoo)|[YeongJoong Seok](https://github.com/Moon-Nights)|[SIANNI](https://github.com/siangit)|
 
+## 주제
+각 분야별 뉴스를 모아 분야별, 키워드별 뉴스를 제공해주는 사이트
 
 ## Goal
 - 웹스크래핑을 통해 수집한 데이터를 저장하기 위한 데이터 모델링 연습
