@@ -1,49 +1,84 @@
-from playwright.sync_api import sync_playwright
+import asyncio
+from playwright.async_api import async_playwright
 from datetime import datetime
+import csv
+import json
 
-with sync_playwright() as playwright:
-        
+
+#daily
+today = datetime.now().strftime('%Y%m%d')
+
+#created dictionary which is named "categories" for each categories of world news
+categories = {
+    "aisa_and_austrailia" : f'https://news.naver.com/breakingnews/section/104/231?date={today}',
+    'usa_and_sa' : f'https://news.naver.com/breakingnews/section/104/232?date={today}',
+    "europe" : f'https://news.naver.com/breakingnews/section/104/233?date={today}',
+    "africa" : f'https://news.naver.com/breakingnews/section/104/234?date={today}',
+    "worldwide" : f'https://news.naver.com/breakingnews/section/104/322?date={today}'
+}
+
+information = []
+
+async def main():
+    async with async_playwright() as playwright:
+
+  
         #launch a browser with headless to see what's going on with 500 slow_mode
-        browser = playwright.chromium.launch(headless=False, slow_mo=500)
-        
-        #create a new page
-        page = browser.new_page()
+        browser = await playwright.chromium.launch(headless=True, slow_mo=500)
 
-        #daily
-        today = datetime.now().strftime('%Y%m%d')
-    
-        #created dictionary which is named "categories" for each categories of world news
-        categories = {
-            "aisa_and_austrailia" : page.goto(f'https://news.naver.com/breakingnews/section/104/231?date={today}'),
-            'usa_and_sa' : page.goto(f'https://news.naver.com/breakingnews/section/104/232?date={today}'),
-            "europe" : page.goto(f'https://news.naver.com/breakingnews/section/104/233?date={today}'),
-            "africa" : page.goto(f'https://news.naver.com/breakingnews/section/104/234?date={today}'),
-            "worldwide" : page.goto(f'https://news.naver.com/breakingnews/section/104/322?date={today}')}
+        #create new blank page
+        page = await browser.new_page()
 
-        
-        #get all the titles for today's news with using for loop
-        for title in categories.values():
-            findout = page.locator("a.sa_text_title").all_inner_texts()
-            print(findout)
+
+        # for loop for each categories
+        for each_category in categories.values():
+            await page.goto(each_category)
+
+            urls = await page.eval_on_selector_all('a.sa_text_title', 'elements =>elements.map(element=>element.href)')
+
             
-            # for _ in each_category:
-            #     await page.locator("a.sa_text_title")
-                # for _ in test:
-                #     title = page.locator("h2.title_area").all_inner_texts()
-    
-        # print(title)
+            for url in urls:
+                await page.goto(url)
 
-        # print("LINK:",page.url)
+                try:
+                
+                    # wait for the 'article' tag to be loaded
+                    await page.wait_for_selector('article')
+                # extract content from the 'article' tag
+                    content = await page.text_content('article')
+                    date = await page.locator('span._ARTICLE_DATE_TIME').all_inner_texts()
+                    journalist = await page.locator('em.media_end_head_journalist_name').all_inner_texts()
+                    title = await page.locator('h2.media_end_head_headline').all_inner_texts()
+                    media = await page.locator('em.media_end_linked_more_point').all_inner_texts()
+                    thumbnail_link = await page.get_attribute('img._LAZY_LOADING', 'src')
+                    
+                    information.append({
+                        'title': title,
+                        'date': date,
+                        'content': content,
+                        'journalist': journalist,
+                        'media': media,
+                        'url': url,
+                        'thumbnail_link': thumbnail_link
+                    })
 
+                    print('BEGIN CONTENT>>>')
+                    print(information[-1])
+                    print('END CONTENT<<<')
 
-        # print("LINK:",page.url)
+                except Exception:
+                    pass
+            
+        await browser.close()
+    with open('news_information.csv', 'w', newline='', encoding='utf-8') as csvfile:
+        fieldnames = ['title','date','content','journalist','media','url','thumbnail_link']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(information)
 
+    # Save to TXT file
+    with open('news_information.txt', 'w', encoding='utf-8') as txtfile:
+        for item in information:
+            txtfile.write(json.dumps(item, ensure_ascii=False) + '\n')
 
-        
-
-
-        #locate a link element with " "text
-        
-
-
-
+asyncio.run(main())
