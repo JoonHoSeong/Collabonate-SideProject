@@ -1,4 +1,4 @@
-# 키워드 기반 뉴스 모음 사이트
+# Key Word Ranking News(KRN)
 ![GitHub Created At](https://img.shields.io/github/created-at/JoonHoSeong/Collabonate-SideProject)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/JoonHoSeong/Collabonate-SideProject)
 ![GitHub last commit](https://img.shields.io/github/last-commit/JoonHoSeong/Collabonate-SideProject)
@@ -18,6 +18,7 @@
 ![python](https://img.shields.io/badge/python-1D9FD7?style=for-the-badge&logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
 ![Selenium](https://img.shields.io/badge/-selenium-%43B02A?style=for-the-badge&logo=selenium&logoColor=white)
+<img src='https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white'>
 
 
 
