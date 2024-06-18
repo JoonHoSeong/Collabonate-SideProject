@@ -12,11 +12,7 @@ django = "^5.0.6"
 flask = "^3.0.3"
 sqlalchemy = "^2.0.30"
 fastapi = "^0.111.0"
-selenium = "^4.21.0"
-webdriver-manager = "^4.0.1"
-bs4 = "^0.0.2"
-pandas = "^2.2.2"
-playwright = "^1.44.0"
+
 
 
 [build-system]
