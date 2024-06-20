@@ -1,6 +1,5 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -11,6 +10,8 @@ from bs4 import BeautifulSoup
 import csv
 import os
 from datetime import datetime
+import time
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 SCRAPED_URLS_FILE = 'scraped_urls.txt'
 CSV_FILE = 'scraped_news.csv'
@@ -19,11 +20,11 @@ CSV_FILE = 'scraped_news.csv'
 def load_all_articles(driver, url):
     try:
         while True:
-            wait = WebDriverWait(driver, 10)
+            wait = WebDriverWait(driver, 3)
             more_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'section_more')))
             ActionChains(driver).move_to_element(more_button).perform()
             more_button.click()
-            time.sleep(2)
+            time.sleep(1)
     except Exception as e:
         pass
 
@@ -45,51 +46,50 @@ def get_article(driver, article_url):
     articles= driver.find_elements(By.CLASS_NAME, 'sa_text_title')
     return [element.get_attribute("href") for element in articles]
 
-#기사에서 정보 뽑아오기
-def get_information(driver, article_url,category):
+# 기사에서 정보 뽑아오기
+def get_information(driver, article_url, category):
     driver.get(article_url)
-    url=article_url
+    url = article_url
+
     try:
-        title=driver.find_element(By.ID,'title_area').text
-    except:
-        title=driver.find_element(By.CLASS_NAME,'NewsEndMain_article_title__kqEzS').text
-    
+        title_element = driver.find_element(By.ID, 'title_area') or driver.find_element(By.CLASS_NAME, 'NewsEndMain_article_title__kqEzS') or driver.find_element(By.ID, 'content').media_element.find_element(By.TAG_NAME, 'h2')
+        title = title_element.text
+    except NoSuchElementException:
+        title = " "
+        print(f"error : title, url={url}")
+
     try:
-        media=driver.find_element(By.CLASS_NAME, 'media_end_categorize_item').get_attribute("alt")
-    except:
-        media=driver.find_element(By.CLASS_NAME, 'NewsEndMain_article_head_press_logo__BrqAh').find_element(By.TAG_NAME, 'img').get_attribute("alt")
+        media_element=driver.find_element(By.ID, 'ct_wrap') or driver.find_element(By.ID, 'content') 
+        media=media_element.find_element(By.TAG_NAME, 'img').get_attribute("alt")
+    except NoSuchElementException:
+        media=" "
+        print(f"error : media, url={url}")
+
     try:
-        time=driver.find_element(By.CLASS_NAME, 'media_end_head_info_datestamp_bunch').find_element(By.TAG_NAME, 'span').text
-    except:
-        time=driver.find_element(By.CLASS_NAME, 'date').text
-    
+        time_element = driver.find_element(By.CLASS_NAME, 'media_end_head_info_datestamp_bunch').find_element(By.TAG_NAME, 'span') or driver.find_element(By.CLASS_NAME, 'date') or driver.find_element(By.CLASS_NAME, 'NewsEndMain_article_title__kqEzS') or driver.find_element(By.ID, 'content').media_element.find_element(By.TAG_NAME, 'em')
+        time = time_element.text
+    except NoSuchElementException:
+        time = " "
+        print(f"error : time, url={url}")
+
     try:
-    # BeautifulSoup을 사용해서 뉴스 요약이랑 사진 설명 제거
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        dic_area_soup = soup.find(id='dic_area')
-    
+        dic_area_soup = BeautifulSoup(driver.page_source, 'html.parser').find(id='dic_area') or BeautifulSoup(driver.page_source, 'html.parser').find(id='comp_news_article')
+
         for tag in dic_area_soup.find_all(class_='media_end_summary'):
-            tag.decompose()  # 특정 클래스를 가진 하위 요소 제거
+            tag.decompose()
+
         for tag in dic_area_soup.find_all(class_='end_photo_org'):
-            tag.decompose()  # 특정 클래스를 가진 하위 요소 제거
+            tag.decompose()
 
         content = dic_area_soup.get_text(strip=True)
-    except:
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        dic_area_soup = soup.find(id='comp_news_article')
-    
-        for tag in dic_area_soup.find_all(class_='img_desc'):
-            tag.decompose()  # 특정 클래스를 가진 하위 요소 제거
-        content = dic_area_soup.get_text(strip=True)
+    except AttributeError:
+        content = " "
 
     try:
-        image = driver.find_element(By.ID, 'img1').get_attribute("src")
-    except:
-        try:
-            image=driver.find_element(By.CLASS_NAME, '_VOD_PLAYER_WRAP').get_attribute("data-cover-image-url")
-        except:
-            image=""
-    category=category
+        image = driver.find_element(By.ID, 'img1').get_attribute("src") or driver.find_element(By.CLASS_NAME, '_VOD_PLAYER_WRAP').get_attribute("data-cover-image-url")
+    except NoSuchElementException:
+        image = " "
+
     return {
         'url': url,
         'title': title,
@@ -133,12 +133,26 @@ def scraping(section_url,browser):
     
 
 def main():
+    
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    
     print(ChromeDriverManager(driver_version='120').install())
-    browser=webdriver.Chrome()
+    browser = webdriver.Chrome(options=options)
+
+    start_time = time.time()
     scraping("https://news.naver.com/section/101",browser)
+    end_time = time.time()
+    execution_time = end_time - start_time
+
+    print(f"함수 실행 시간: {execution_time} 초")
     scraping("https://news.naver.com/section/103", browser)
 
     browser.quit()
 
 if __name__ == "__main__":
+    
     main()
