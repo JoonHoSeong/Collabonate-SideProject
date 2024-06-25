@@ -17,8 +17,21 @@ webdriver-manager = "^4.0.1"
 bs4 = "^0.0.2"
 pandas = "^2.2.2"
 playwright = "^1.44.0"
+black = "^24.4.2"
+isort = "^5.13.2"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile="black"
+
+
+[tool.django-stubs]
+django_settings_module = "djangoProject.settings"
