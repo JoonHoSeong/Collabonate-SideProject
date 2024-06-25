@@ -22,9 +22,7 @@ def load_all_articles(driver, url):
     try:
         while True:
             wait = WebDriverWait(driver, 10)
-            more_button = wait.until(
-                EC.element_to_be_clickable((By.CLASS_NAME, "section_more"))
-            )
+            more_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "section_more")))
             ActionChains(driver).move_to_element(more_button).perform()
             more_button.click()
             time.sleep(2)
@@ -60,19 +58,13 @@ def get_information(driver, article_url, category):
     try:
         title = driver.find_element(By.ID, "title_area").text
     except:
-        title = driver.find_element(
-            By.CLASS_NAME, "NewsEndMain_article_title__kqEzS"
-        ).text
+        title = driver.find_element(By.CLASS_NAME, "NewsEndMain_article_title__kqEzS").text
 
     try:
-        media = driver.find_element(
-            By.CLASS_NAME, "media_end_categorize_item"
-        ).get_attribute("alt")
+        media = driver.find_element(By.CLASS_NAME, "media_end_categorize_item").get_attribute("alt")
     except:
         media = (
-            driver.find_element(
-                By.CLASS_NAME, "NewsEndMain_article_head_press_logo__BrqAh"
-            )
+            driver.find_element(By.CLASS_NAME, "NewsEndMain_article_head_press_logo__BrqAh")
             .find_element(By.TAG_NAME, "img")
             .get_attribute("alt")
         )
@@ -108,9 +100,7 @@ def get_information(driver, article_url, category):
         image = driver.find_element(By.ID, "img1").get_attribute("src")
     except:
         try:
-            image = driver.find_element(
-                By.CLASS_NAME, "_VOD_PLAYER_WRAP"
-            ).get_attribute("data-cover-image-url")
+            image = driver.find_element(By.CLASS_NAME, "_VOD_PLAYER_WRAP").get_attribute("data-cover-image-url")
         except:
             image = ""
     category = category
@@ -161,7 +151,7 @@ def scraping(section_url, browser):
                 write_scraped_url(article)
 
 
-def main():
+def main() -> None:
     print(ChromeDriverManager(driver_version="120").install())
     browser = webdriver.Chrome()
     scraping("https://news.naver.com/section/101", browser)

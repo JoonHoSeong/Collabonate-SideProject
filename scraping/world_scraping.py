@@ -32,9 +32,7 @@ async def main():
         for each_category in categories.values():
             await page.goto(each_category)
 
-            urls = await page.eval_on_selector_all(
-                "a.sa_text_title", "elements =>elements.map(element=>element.href)"
-            )
+            urls = await page.eval_on_selector_all("a.sa_text_title", "elements =>elements.map(element=>element.href)")
 
             for url in urls:
                 await page.goto(url)
@@ -45,21 +43,11 @@ async def main():
                     await page.wait_for_selector("article")
                     # extract content from the 'article' tag
                     content = await page.text_content("article")
-                    date = await page.locator(
-                        "span._ARTICLE_DATE_TIME"
-                    ).all_inner_texts()
-                    journalist = await page.locator(
-                        "em.media_end_head_journalist_name"
-                    ).all_inner_texts()
-                    title = await page.locator(
-                        "h2.media_end_head_headline"
-                    ).all_inner_texts()
-                    media = await page.locator(
-                        "em.media_end_linked_more_point"
-                    ).all_inner_texts()
-                    thumbnail_link = await page.get_attribute(
-                        "img._LAZY_LOADING", "src"
-                    )
+                    date = await page.locator("span._ARTICLE_DATE_TIME").all_inner_texts()
+                    journalist = await page.locator("em.media_end_head_journalist_name").all_inner_texts()
+                    title = await page.locator("h2.media_end_head_headline").all_inner_texts()
+                    media = await page.locator("em.media_end_linked_more_point").all_inner_texts()
+                    thumbnail_link = await page.get_attribute("img._LAZY_LOADING", "src")
 
                     information.append(
                         {

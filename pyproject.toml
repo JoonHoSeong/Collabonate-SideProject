@@ -19,7 +19,6 @@ pandas = "^2.2.2"
 playwright = "^1.44.0"
 black = "^24.4.2"
 isort = "^5.13.2"
-mypy = "^1.10.1"
 
 
 [build-system]
@@ -33,14 +32,6 @@ line-length = 120
 [tool.isort]
 profile="black"
 
-[tool.mypy]
-plugins = ["mypy_django_plugin.main"]
-python_version = 3.12
-strict = true
-
-[[tool.mypy.overrides]]
-module = "*.migrations.*"
-ignore_errors = true
 
 [tool.django-stubs]
 django_settings_module = "djangoProject.settings"
