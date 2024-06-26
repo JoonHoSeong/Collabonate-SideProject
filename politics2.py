@@ -22,7 +22,7 @@ def setup_webdriver():
     user = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     options = Options()
     options.add_argument(f"User-Agent={user}")
-    options.add_argument("--headless")  # 이 줄을 주석 처리하거나 제거
+    # options.add_argument("--headless")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920x1080")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -47,7 +47,7 @@ def select_category(driver, index):
     category_main = driver.find_element(By.CSS_SELECTOR, ".ct_snb_h2_a")
     category_detail = driver.find_elements(By.CSS_SELECTOR, ".ct_snb_nav_item_link")
     category_detail_list = [element.text for element in category_detail]
-    category_cleaned = [cat.replace('/', ' ') for cat in category_detail_list]
+    category_cleaned = [cat.replace('/', '') for cat in category_detail_list]
 
     category = f"{category_main.text.strip()}_{category_detail[index].text.strip()}"
     category_filename = f"{category_main.text.strip()}_{category_cleaned[index].strip()}"
@@ -116,12 +116,14 @@ def collect_and_save_news_data(driver, category, csv_filename):
 
         except Exception as e:
             logging.error(f"Error fetching data for {url}: {e}")
-            driver.save_screenshot('error_screenshot.png')  # 오류가 발생했을 때 스크린샷 찍기
-            break  # 중간에 오류가 발생하면 데이터를 저장하고 중단
+            # 데이터 저장하고 반복문 계속
+            save_to_csv(data, csv_filename)
+            return data
 
     # 데이터를 CSV 파일에 저장
     if data:
         save_to_csv(data, csv_filename)
+    return data
 
 def save_to_csv(data, csv_filename):
     # CSV 파일의 헤더 작성
@@ -147,12 +149,13 @@ def main():
             category, category_filename = select_category(driver, i)
             load_all_articles(driver)
             csv_filename = f'{output_dir}/{current_time}_{category_filename}.csv'
-            collect_and_save_news_data(driver, category, csv_filename)
+            collected_data = collect_and_save_news_data(driver, category, csv_filename)
+            if not collected_data:
+                logging.warning(f"No data collected for category {i}, skipping to next category.")
         except WebDriverException as e:
             logging.error(f"Selenium WebDriver error in main loop for category {i}: {e}")
-            driver.save_screenshot(f'error_category_{i}.png')  # 오류 발생 시 스크린샷 저장
         except Exception as e:
-            logging.error(f"Error in main loop for category {i}: {e}")
+            logging.error(f"Unexpected error in main loop for category {i}: {e}")
     
     driver.quit()
 
