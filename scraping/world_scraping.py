@@ -81,6 +81,7 @@ async def main():
 
         await browser.close()
 
+    #save as csv file
     with open('world_news.csv', 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['title', 'date', 'content', 'media', 'url', 'thumbnail_link']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
