@@ -1,26 +1,26 @@
-import os
-import logging
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.options import Options
-from bs4 import BeautifulSoup
-import pandas as pd
-from datetime import datetime
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
 import csv
+import logging
+import os
+from datetime import datetime
+
+import pandas as pd
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
 
 # 로그 설정
 logging.basicConfig(
     level=logging.INFO,  # 로그 레벨 설정
-    format='%(asctime)s - %(levelname)s - %(message)s',  # 로그 포맷 설정
-    handlers=[
-        logging.StreamHandler()  # 콘솔 출력 핸들러 설정
-    ]
+    format="%(asctime)s - %(levelname)s - %(message)s",  # 로그 포맷 설정
+    handlers=[logging.StreamHandler()],  # 콘솔 출력 핸들러 설정
 )
+
 
 def configure_driver(url):
     # 사용자 에이전트 설정
@@ -51,6 +51,7 @@ def configure_driver(url):
 
     return driver
 
+
 def extract_news_rankings(driver, csv_filename):
     # WebDriverWait를 사용하여 페이지가 로드될 때까지 대기
     wait = WebDriverWait(driver, 10)
@@ -74,11 +75,11 @@ def extract_news_rankings(driver, csv_filename):
             article_titles = [ranking.text for ranking in rankings]
 
             # 기사 랭킹을 각 리스트에 추가 (최대 5개)
-            ranking_1 = (article_titles[0] if len(article_titles) >= 1 else None)
-            ranking_2 = (article_titles[1] if len(article_titles) >= 2 else None)
-            ranking_3 = (article_titles[2] if len(article_titles) >= 3 else None)
-            ranking_4 = (article_titles[3] if len(article_titles) >= 4 else None)
-            ranking_5 = (article_titles[4] if len(article_titles) >= 5 else None)
+            ranking_1 = article_titles[0] if len(article_titles) >= 1 else None
+            ranking_2 = article_titles[1] if len(article_titles) >= 2 else None
+            ranking_3 = article_titles[2] if len(article_titles) >= 3 else None
+            ranking_4 = article_titles[3] if len(article_titles) >= 4 else None
+            ranking_5 = article_titles[4] if len(article_titles) >= 5 else None
 
             data.append([media_name, ranking_1, ranking_2, ranking_3, ranking_4, ranking_5])
 
@@ -91,13 +92,14 @@ def extract_news_rankings(driver, csv_filename):
         save_to_csv(data, csv_filename)
     return data
 
+
 def save_to_csv(data, csv_filename):
     # CSV 파일의 헤더 작성
     file_exists = os.path.isfile(csv_filename)
-    with open(csv_filename, 'a', encoding='utf-8-sig', newline='') as file:
+    with open(csv_filename, "a", encoding="utf-8-sig", newline="") as file:
         writer = csv.writer(file)
         if not file_exists:
-            writer.writerow(['media_name', 'ranking_1', 'ranking_2', 'ranking_3', 'ranking_4', 'ranking_5'])
+            writer.writerow(["media_name", "ranking_1", "ranking_2", "ranking_3", "ranking_4", "ranking_5"])
         writer.writerows(data)
         logging.info(f"데이터 저장 완료: {csv_filename}")
 
@@ -108,26 +110,26 @@ def main():
 
     # 드라이버 설정 및 URL 접속
     driver = configure_driver(url)
-    
+
     current_time = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-    output_dir = './output'
+    output_dir = "./output"
     os.makedirs(output_dir, exist_ok=True)
-    
+
     logging.info(f"{current_time} : 랭킹 뉴스 데이터 수집 시작")
 
     try:
-        csv_filename = f'{output_dir}/{current_time}_랭킹.csv'
+        csv_filename = f"{output_dir}/{current_time}_랭킹.csv"
         collected_data = extract_news_rankings(driver, csv_filename)
         if not collected_data:
             logging.warning(f"No data collected, skipping to next media.")
-            
+
     except Exception as e:
         logging.error(f"크롤링 중 오류 발생: {e}")
 
     finally:
         # 드라이버 종료
         driver.quit()
-        
+
 
 if __name__ == "__main__":
     main()
