@@ -22,15 +22,11 @@ class Migration(migrations.Migration):
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 (
                     "author",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="users.user"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="users.user"),
                 ),
                 (
                     "news",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="newses.news"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="newses.news"),
                 ),
                 (
                     "parent_comment",

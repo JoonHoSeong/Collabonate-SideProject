@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class News(models.Model):
     id = models.AutoField(primary_key=True)
@@ -10,4 +11,4 @@ class News(models.Model):
     media = models.CharField(max_length=255, null=True)
     summary = models.TextField()
     keyword = models.CharField(max_length=255, null=True)
-    detail_category = models.ForeignKey('categories.DetailCategory', on_delete=models.CASCADE, null=True)
+    detail_category = models.ForeignKey("categories.DetailCategory", on_delete=models.CASCADE, null=True)
