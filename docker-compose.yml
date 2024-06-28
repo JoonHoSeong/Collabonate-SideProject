@@ -9,23 +9,24 @@ services:
       - "8000:8000"
     volumes:
       - ./keywordnews:/app
-    command: sh -c "python manage.py runserver 0.0.0.0:8000"
-    # "python manage.py wait_for_db &&
-    # python manage.py migrate &&
-    # python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py migrate &&
+                    python manage.py runserver 0.0.0.0:8000"
+
     environment:
       - DB_HOST=db
       - DB_NAME=keywordnews
-      - DB_USER=keywordnews_admin_postgres
+      - DB_USER=joonhoseong
       - DB_PASSWORD=password123
     depends_on:
       - db
 
   db : # PostgreSQL Database
-    image : postgres:16-alpine
+    image : postgres:16
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=keywordnews
-      - POSTGRES_USER=keywordnews_admin_postgres
+      - POSTGRES_USER=joonhoseong
       - POSTGRES_PASSWORD=password123
+# volumes:
+#   postgres_data : 

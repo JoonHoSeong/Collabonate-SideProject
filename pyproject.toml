@@ -6,7 +6,7 @@ authors = ["JoonHoSeong <joonho1366@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<=3.12"
 ipykernel = "^6.29.4"
 django = "^5.0.6"
 flask = "^3.0.3"
