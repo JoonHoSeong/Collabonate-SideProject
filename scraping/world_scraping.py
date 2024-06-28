@@ -1,24 +1,23 @@
 import asyncio
-from playwright.async_api import async_playwright
-from datetime import datetime
 import csv
+from datetime import datetime
+
+from playwright.async_api import async_playwright
 
 # daily
-today = datetime.now().strftime('%Y%m%d')
+today = datetime.now().strftime("%Y%m%d")
 
 # created dictionary which is named "categories" for each categories of world news
-category_ids = {
-    "aisa_and_austrailia": 231,
-    'usa_and_sa': 232,
-    "europe": 233,
-    "africa": 234,
-    "worldwide": 322
+categories = {
+    "aisa_and_austrailia": f"https://news.naver.com/breakingnews/section/104/231?date={today}",
+    "usa_and_sa": f"https://news.naver.com/breakingnews/section/104/232?date={today}",
+    "europe": f"https://news.naver.com/breakingnews/section/104/233?date={today}",
+    "africa": f"https://news.naver.com/breakingnews/section/104/234?date={today}",
+    "worldwide": f"https://news.naver.com/breakingnews/section/104/322?date={today}",
 }
 
-#soft-code for each categories daily
-categories = {key: f'https://news.naver.com/breakingnews/section/104/{value}?date={today}' for key, value in category_ids.items()}
-
 information = []
+
 
 async def main():
     async with async_playwright() as playwright:
@@ -29,50 +28,38 @@ async def main():
         # create new blank page
         page = await browser.new_page()
 
-        # for loop for each category
+        # for loop for each categories
         for each_category in categories.values():
             await page.goto(each_category)
 
-            urls = await page.eval_on_selector_all('a.sa_text_title', 'elements => elements.map(element => element.href)')
+            urls = await page.eval_on_selector_all("a.sa_text_title", "elements =>elements.map(element=>element.href)")
 
             for url in urls:
                 await page.goto(url)
 
                 try:
+
                     # wait for the 'article' tag to be loaded
-                    await page.wait_for_selector('article')
-
+                    await page.wait_for_selector("article")
                     # extract content from the 'article' tag
-                    content = await page.text_content('article')
+                    content = await page.text_content("article")
+                    date = await page.locator("span._ARTICLE_DATE_TIME").all_inner_texts()
+                    journalist = await page.locator("em.media_end_head_journalist_name").all_inner_texts()
+                    title = await page.locator("h2.media_end_head_headline").all_inner_texts()
+                    media = await page.locator("em.media_end_linked_more_point").all_inner_texts()
+                    thumbnail_link = await page.get_attribute("img._LAZY_LOADING", "src")
 
-                    try:
-                        date = await page.locator('span._ARTICLE_DATE_TIME').all_inner_texts()
-                    except Exception:
-                        date = "N/A"
-
-                    try:
-                        title = await page.locator('h2.media_end_head_headline').all_inner_texts()
-                    except Exception:
-                        title = "N/A"
-
-                    try:
-                        media = await page.locator('em.media_end_linked_more_point').all_inner_texts()
-                    except Exception:
-                        media = "N/A"
-
-                    try:
-                        thumbnail_link = await page.get_attribute('img._LAZY_LOADING', 'src')
-                    except Exception:
-                        thumbnail_link = "N/A"
-
-                    information.append({
-                        'title': title,
-                        'date': date,
-                        'content': content,
-                        'media': media,
-                        'url': url,
-                        'thumbnail_link': thumbnail_link
-                    })
+                    information.append(
+                        {
+                            "title": title,
+                            "date": date,
+                            "content": content,
+                            "journalist": journalist,
+                            "media": media,
+                            "url": url,
+                            "thumbnail_link": thumbnail_link,
+                        }
+                    )
 
                     print(information[-1])
 
@@ -81,11 +68,25 @@ async def main():
 
         await browser.close()
 
+<<<<<<< HEAD
     #save as csv file
     with open('world_news.csv', 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['title', 'date', 'content', 'media', 'url', 'thumbnail_link']
+=======
+    with open("news_information.csv", "w", newline="", encoding="utf-8") as csvfile:
+        fieldnames = [
+            "title",
+            "date",
+            "content",
+            "journalist",
+            "media",
+            "url",
+            "thumbnail_link",
+        ]
+>>>>>>> 98e7cff75cb5bd838437f646156d240f4303d318
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(information)
+
 
 asyncio.run(main())
