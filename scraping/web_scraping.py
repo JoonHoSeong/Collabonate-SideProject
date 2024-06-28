@@ -26,7 +26,7 @@ def load_all_articles(driver, url):
             more_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "section_more")))
             ActionChains(driver).move_to_element(more_button).perform()
             more_button.click()
-            wait.until(EC.staleness_of(more_button))
+            time.sleep(1)
     except Exception as e:
         pass
 
@@ -171,10 +171,6 @@ def scraping(section_url, browser):
 def main():
 
     options = Options()
-    options.add_argument("--headless")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
 
     print(ChromeDriverManager(driver_version="120").install())
     browser = webdriver.Chrome(options=options)
@@ -196,3 +192,5 @@ def main():
 if __name__ == "__main__":
 
     main()
+
+ 

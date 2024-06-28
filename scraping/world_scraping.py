@@ -1,5 +1,6 @@
 import asyncio
 import csv
+import os
 from datetime import datetime
 
 from playwright.async_api import async_playwright
@@ -18,20 +19,64 @@ categories = {
 
 information = []
 
+# 세부 카테고리 링크 return
+async def load_category_page(page, section_url):
+    await page.goto(section_url)
+    link_elements = await page.query_selector_all('.ct_snb_nav_item_link')
+    links = [await element.get_attribute('href') for element in link_elements]
+     # 각 링크 앞에 "https://"를 붙임
+    links_with_https = [f"https://news.naver.com{link}" for link in links]
+    
+    return links_with_https
+
+#기사 끝까지 스크롤링
+async def load_all_articles(page):
+    try:
+        while True:
+            more_button = await page.wait_for_selector(".section_more")
+            await more_button.hover()
+            await more_button.click()
+            await page.wait_for_load_state("networkidle")
+    except Exception as e:
+        pass
+
+#csv파일에 저장
+async def save_to_csv(scraped_data, csv_file_path):
+    with open(csv_file_path, mode="w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow(["URL", "Title", "Media", "Time", "Content", "Image", "Category"])  # CSV header
+        for data in scraped_data:
+            writer.writerow(
+                [
+                    data["url"],
+                    data["title"],
+                    data["media"],
+                    data["time"],
+                    data["content"],
+                    data["image"],
+                    data["category"],
+                ]
+            )
+
 
 async def main():
     async with async_playwright() as playwright:
 
         # launch a browser with headless to see what's going on with 500 slow_mode
-        browser = await playwright.chromium.launch(headless=True, slow_mo=500)
+        browser = await playwright.chromium.launch(headless=False, slow_mo=500)
 
         # create new blank page
         page = await browser.new_page()
 
-        # for loop for each categories
-        for each_category in categories.values():
-            await page.goto(each_category)
+        section_url="https://news.naver.com/section/101"
+        article_links = await load_category_page(page, section_url)
+        print(article_links)
+        
 
+    # for loop for each categories
+        for each_category in article_links:
+            await page.goto(f"{each_category}?date={today}")
+            await load_all_articles(page)
             urls = await page.eval_on_selector_all("a.sa_text_title", "elements =>elements.map(element=>element.href)")
 
             for url in urls:
@@ -65,22 +110,9 @@ async def main():
 
                 except Exception:
                     pass
+            csv_file_path = os.path.abspath(f"scraping/scraped_data.csv")
+            save_to_csv(information, csv_file_path)
 
         await browser.close()
-
-    with open("news_information.csv", "w", newline="", encoding="utf-8") as csvfile:
-        fieldnames = [
-            "title",
-            "date",
-            "content",
-            "journalist",
-            "media",
-            "url",
-            "thumbnail_link",
-        ]
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(information)
-
 
 asyncio.run(main())
