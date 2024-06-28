@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+
 import os
 from pathlib import Path
 
@@ -29,14 +30,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-CUSTOM_APPS = [
-    "admin_user",
-    "core",
-    'categories',
-    'newses',
-    'users',
-    'comments'
-    ]
+CUSTOM_APPS = ["admin_user", "core", "categories", "newses", "users", "comments"]
 DEFAULT_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -46,7 +40,6 @@ DEFAULT_APPS = [
     "django.contrib.staticfiles",
 ]
 INSTALLED_APPS = CUSTOM_APPS + DEFAULT_APPS
-
 
 
 MIDDLEWARE = [
@@ -84,12 +77,12 @@ WSGI_APPLICATION = "app.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST' : os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER' : os.environ.get('DB_USER'),
-        'PASSWORD' : os.environ.get('DB_PASSWORD'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": os.environ.get("DB_HOST"),
+        "NAME": os.environ.get("DB_NAME"),
+        "USER": os.environ.get("DB_USER"),
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
     }
 }
 
