@@ -2,8 +2,8 @@
 # Alpine Linux는 경량화된 리눅스 배포판으로, 컨테이너 환경에 적합
 FROM python:3.11-alpine3.19
 
-# LABEL 명령어는 이미지에 메타데이터를 추가합니다. 여기서는 이미지의 유지 관리자를 "keywordnews"로 지정하고 있습니다.
-LABEL maintainer="keywordnews"
+# LABEL 명령어는 이미지에 메타데이터를 추가합니다. 여기서는 이미지의 유지 관리자를 "joonhoseong"로 지정하고 있습니다.
+LABEL maintainer="joonhoseong"
 
 # 환경 변수 PYTHONUNBUFFERED를 1로 설정합니다. 
 # 이는 Python이 표준 입출력 버퍼링을 비활성화하게 하여, 로그가 즉시 콘솔에 출력되게 합니다. 
