@@ -1,6 +1,7 @@
-# version: "3.11" #Docker compose API version
+version: "3.11"
+
 services:
-  app: #Django
+  app: # Django 애플리케이션
     build:
       context: .
       args:
@@ -11,7 +12,6 @@ services:
       - ./keywordnews:/app
     command: sh -c "python manage.py migrate &&
                     python manage.py runserver 0.0.0.0:8000"
-
     environment:
       - DB_HOST=db
       - DB_NAME=keywordnews
@@ -20,26 +20,24 @@ services:
     depends_on:
       - db
 
-  db : # PostgreSQL Database
-    image : postgres:16
+  db: # PostgreSQL 데이터베이스
+    image: postgres:16
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=keywordnews
       - POSTGRES_USER=joonhoseong
       - POSTGRES_PASSWORD=password123
-# volumes:
-#   postgres_data : 
 
-scraper: # Scraping Service
-  build:
-    context: .
-    dockerfile: Dockerfile
-  environment:
-    - DB_NAME=keywordnews
-    - DB_USER=joonhoseong
-    - DB_PASSWORD=password123
-    - DB_HOST=db
-    - DB_PORT=5432
-  depends_on:
-    - db
+  scraper: # 스크래핑 서비스
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DB_NAME=keywordnews
+      - DB_USER=joonhoseong
+      - DB_PASSWORD=password123
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - db
