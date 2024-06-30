@@ -30,3 +30,16 @@ services:
       - POSTGRES_PASSWORD=password123
 # volumes:
 #   postgres_data : 
+
+scraper: # Scraping Service
+  build:
+    context: .
+    dockerfile: Dockerfile
+  environment:
+    - DB_NAME=keywordnews
+    - DB_USER=joonhoseong
+    - DB_PASSWORD=password123
+    - DB_HOST=db
+    - DB_PORT=5432
+  depends_on:
+    - db

@@ -16,6 +16,19 @@ COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./keywordnews /app
 
+# 스크래핑 코드 복사
+COPY scrapping_code.py scrapping_code.py
+
+# 필요한 환경 변수 설정 (여기서는 예시로 설정)
+ENV DB_NAME keywordnews
+ENV DB_USER joonhoseong
+ENV DB_PASSWORD password123
+ENV DB_HOST db
+ENV DB_PORT 5432
+
+# 스크립트 실행
+CMD ["python", "scrapping_code.py"]
+
 WORKDIR /app
 EXPOSE 8000
 
