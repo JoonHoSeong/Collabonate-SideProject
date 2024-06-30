@@ -1,9 +1,9 @@
-let selectedKeyword = '';
+let selectedPress = '';
 
-// URL에서 키워드 파라미터를 가져오는 함수
-function getSelectedKeywordFromURL() {
+// URL에서 언론사 파라미터를 가져오는 함수
+function getSelectedPressFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('keyword') || '경제'; // 기본값은 '경제'
+    return urlParams.get('press') || 'A신문'; // 기본값은 A신문
 }
 
 // 뉴스 데이터를 가져오는 함수 (예시)
@@ -17,9 +17,8 @@ function fetchNews(page = 1) {
     const news = [];
     for (let i = startIndex; i < endIndex; i++) {
         news.push({
-            title: `${selectedKeyword} 관련 뉴스 제목 ${i + 1}`,
-            summary: `${selectedKeyword}에 관한 뉴스 ${i + 1} 요약입니다. 여기에 뉴스 내용이 간략하게 들어갑니다.`,
-            source: `뉴스 출처 ${i % 3 + 1}`
+            title: `${selectedPress} 뉴스 제목 ${i + 1}`,
+            summary: `${selectedPress}의 뉴스 ${i + 1} 요약입니다. 여기에 뉴스 내용이 간략하게 들어갑니다.`
         });
     }
 
@@ -32,7 +31,7 @@ function fetchNews(page = 1) {
 
 // 페이지 로드 시 실행되는 함수
 function init() {
-    selectedKeyword = getSelectedKeywordFromURL();
+    selectedPress = getSelectedPressFromURL();
     updatePageTitle();
     updateUserProfile();
     loadNews(1);
@@ -41,9 +40,9 @@ function init() {
 
 // 페이지 제목 업데이트
 function updatePageTitle() {
-    const keywordTitle = document.getElementById('keyword-title');
-    keywordTitle.textContent = `'${selectedKeyword}' 키워드 뉴스`;
-    document.title = `'${selectedKeyword}' 키워드 뉴스`;
+    const pressTitle = document.getElementById('press-title');
+    pressTitle.textContent = `${selectedPress} 발행 뉴스`;
+    document.title = `${selectedPress} 발행 뉴스`;
 }
 
 // 사용자 프로필 업데이트 (예시)
@@ -76,7 +75,6 @@ function renderNews(news) {
         newsItem.innerHTML = `
             <h2 class="news-title">${item.title}</h2>
             <p class="news-summary">${item.summary}</p>
-            <p class="news-source">출처: ${item.source}</p>
         `;
         newsList.appendChild(newsItem);
     });
