@@ -17,7 +17,7 @@ COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./keywordnews /app
 
 # 스크래핑 코드 복사
-COPY scrapping_code.py scrapping_code.py
+COPY scrapping_code.py /app/scrapping_code.py
 
 # 필요한 환경 변수 설정 (여기서는 예시로 설정)
 ENV DB_NAME keywordnews
@@ -26,14 +26,42 @@ ENV DB_PASSWORD password123
 ENV DB_HOST db
 ENV DB_PORT 5432
 
-# 스크립트 실행
-CMD ["python", "scrapping_code.py"]
+
 
 WORKDIR /app
 EXPOSE 8000
 
 ARG DEV=false
 
+# # 필요한 패키지 설치
+# RUN apk update && \
+#     apk add --no-cache \
+#         chromium \
+#         chromium-chromedriver \
+#         python3-dev \
+#         py3-pip \
+#         build-base \
+#         udev \
+#         ttf-freefont \
+#         git \
+#         nodejs \
+#         npm
+
+# # Playwright 설치 (pip로 설치)
+# RUN python3 -m venv /venv && \
+#     /venv/bin/pip install --upgrade pip && \
+#     /venv/bin/pip install playwright
+
+# # Python 가상 환경 설정 및 패키지 설치
+# RUN /venv/bin/pip install -r /tmp/requirements.txt && \
+#     if [ "$DEV" = "true" ]; then /venv/bin/pip install -r /tmp/requirements.dev.txt; fi && \
+#     rm -rf /tmp/*
+
+
+
+
+# # Python 종속성 설치
+# RUN /py/bin/pip install -r /tmp/requirements.txt
 
 RUN python -m venv /py && \ 
     /py/bin/pip install --upgrade pip && \
@@ -52,5 +80,8 @@ RUN python -m venv /py && \
         django-user
 
 ENV PATH="/py/bin:$PATH"
+
+# 스크립트 실행
+CMD ["python", "scrapping_code.py"]
 
 USER django-user
