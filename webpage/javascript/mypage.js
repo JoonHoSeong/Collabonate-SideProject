@@ -3,6 +3,41 @@
 let allNews = []; // 모든 뉴스를 저장할 배열
 let currentDisplayCount = 5; // 현재 표시된 뉴스 개수
 
+// 최근 본 뉴스 예시 데이터
+const mockNewsData = [
+    { id: 1, title: "코로나19 백신 접종 시작", summary: "전국적으로 코로나19 백신 접종이 시작되었습니다." },
+    { id: 2, title: "새로운 AI 기술 개발", summary: "국내 연구진이 혁신적인 AI 기술을 개발했다고 발표했습니다." },
+    { id: 3, title: "올림픽 개막식 성황리에 열려", summary: "2024년 올림픽이 화려한 개막식과 함께 시작되었습니다." },
+    { id: 4, title: "글로벌 기후 변화 대책 논의", summary: "세계 각국 정상들이 모여 기후 변화 대응책을 논의했습니다." },
+    { id: 5, title: "신규 창업 지원 정책 발표", summary: "정부가 청년 창업을 위한 새로운 지원 정책을 발표했습니다." },
+    { id: 6, title: "우주 탐사선 화성 착륙 성공", summary: "국제 우주 탐사선이 화성 표면에 성공적으로 착륙했습니다." },
+    { id: 7, title: "새로운 교육 시스템 도입", summary: "교육부가 AI를 활용한 새로운 교육 시스템 도입을 발표했습니다." },
+    { id: 8, title: "세계 경제 포럼 개최", summary: "세계 각국의 경제 전문가들이 모여 경제 전망을 논의했습니다." },
+    { id: 9, title: "신규 문화재 발굴", summary: "국내에서 새로운 고대 유적이 발견되어 학계의 주목을 받고 있습니다." },
+    { id: 10, title: "국제 영화제 개막", summary: "세계적인 영화인들이 참석한 국제 영화제가 개막되었습니다." },
+    { id: 1, title: "코로나19 백신 접종 시작", summary: "전국적으로 코로나19 백신 접종이 시작되었습니다." },
+    { id: 2, title: "새로운 AI 기술 개발", summary: "국내 연구진이 혁신적인 AI 기술을 개발했다고 발표했습니다." },
+    { id: 3, title: "올림픽 개막식 성황리에 열려", summary: "2024년 올림픽이 화려한 개막식과 함께 시작되었습니다." },
+    { id: 4, title: "글로벌 기후 변화 대책 논의", summary: "세계 각국 정상들이 모여 기후 변화 대응책을 논의했습니다." },
+    { id: 5, title: "신규 창업 지원 정책 발표", summary: "정부가 청년 창업을 위한 새로운 지원 정책을 발표했습니다." },
+    { id: 6, title: "우주 탐사선 화성 착륙 성공", summary: "국제 우주 탐사선이 화성 표면에 성공적으로 착륙했습니다." },
+    { id: 7, title: "새로운 교육 시스템 도입", summary: "교육부가 AI를 활용한 새로운 교육 시스템 도입을 발표했습니다." },
+    { id: 8, title: "세계 경제 포럼 개최", summary: "세계 각국의 경제 전문가들이 모여 경제 전망을 논의했습니다." },
+    { id: 9, title: "신규 문화재 발굴", summary: "국내에서 새로운 고대 유적이 발견되어 학계의 주목을 받고 있습니다." },
+    { id: 10, title: "국제 영화제 개막", summary: "세계적인 영화인들이 참석한 국제 영화제가 개막되었습니다." },
+    { id: 1, title: "코로나19 백신 접종 시작", summary: "전국적으로 코로나19 백신 접종이 시작되었습니다." },
+    { id: 2, title: "새로운 AI 기술 개발", summary: "국내 연구진이 혁신적인 AI 기술을 개발했다고 발표했습니다." },
+    { id: 3, title: "올림픽 개막식 성황리에 열려", summary: "2024년 올림픽이 화려한 개막식과 함께 시작되었습니다." },
+    { id: 4, title: "글로벌 기후 변화 대책 논의", summary: "세계 각국 정상들이 모여 기후 변화 대응책을 논의했습니다." },
+    { id: 5, title: "신규 창업 지원 정책 발표", summary: "정부가 청년 창업을 위한 새로운 지원 정책을 발표했습니다." },
+    { id: 6, title: "우주 탐사선 화성 착륙 성공", summary: "국제 우주 탐사선이 화성 표면에 성공적으로 착륙했습니다." },
+    { id: 7, title: "새로운 교육 시스템 도입", summary: "교육부가 AI를 활용한 새로운 교육 시스템 도입을 발표했습니다." },
+    { id: 8, title: "세계 경제 포럼 개최", summary: "세계 각국의 경제 전문가들이 모여 경제 전망을 논의했습니다." },
+    { id: 9, title: "신규 문화재 발굴", summary: "국내에서 새로운 고대 유적이 발견되어 학계의 주목을 받고 있습니다." },
+    { id: 10, title: "국제 영화제 개막", summary: "세계적인 영화인들이 참석한 국제 영화제가 개막되었습니다." },
+    // ... 추가 20개의 뉴스 항목 (총 30개가 되도록)
+];
+
 document.addEventListener('DOMContentLoaded', function() {
     // 프로필 이미지 업로드
     const imageUpload = document.getElementById('image-upload');
@@ -26,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
     changeNicknameBtn.addEventListener('click', function() {
         const newNickname = nicknameInput.value.trim();
         if (newNickname) {
-            // 여기에 서버로 새 닉네임을 보내는 로직을 구현
             console.log('새 닉네임:', newNickname);
             alert('닉네임이 변경되었습니다.');
         } else {
@@ -50,7 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // 여기에 서버로 비밀번호 변경 요청을 보내는 로직을 구현
         console.log('비밀번호 변경 요청');
         alert('비밀번호가 변경되었습니다.');
     });
@@ -61,50 +94,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // 더보기/접기 버튼 이벤트 리스너
     const toggleButton = document.querySelector('.show-more');
     toggleButton.addEventListener('click', toggleNewsDisplay);
-
-    
 });
 
 function loadRecentNews() {
-    // 실제로는 서버에서 JSON을 받아오는 API 호출이 필요합니다.
-    // 여기서는 예시 데이터를 사용합니다.
-    const mockNewsData = [
-        { id: 1, title: "첫 번째 뉴스 제목", summary: "첫 번째 뉴스 요약..." },
-        { id: 2, title: "두 번째 뉴스 제목", summary: "두 번째 뉴스 요약..." },
-        { id: 3, title: "세 번째 뉴스 제목", summary: "세 번째 뉴스 요약..." },
-        { id: 1, title: "첫 번째 뉴스 제목", summary: "첫 번째 뉴스 요약..." },
-        { id: 2, title: "두 번째 뉴스 제목", summary: "두 번째 뉴스 요약..." },
-        { id: 3, title: "세 번째 뉴스 제목", summary: "세 번째 뉴스 요약..." },
-        { id: 1, title: "첫 번째 뉴스 제목", summary: "첫 번째 뉴스 요약..." },
-        { id: 2, title: "두 번째 뉴스 제목", summary: "두 번째 뉴스 요약..." },
-        { id: 3, title: "세 번째 뉴스 제목", summary: "세 번째 뉴스 요약..." },
-        { id: 1, title: "첫 번째 뉴스 제목", summary: "첫 번째 뉴스 요약..." },
-        { id: 2, title: "두 번째 뉴스 제목", summary: "두 번째 뉴스 요약..." },
-        { id: 3, title: "세 번째 뉴스 제목", summary: "세 번째 뉴스 요약..." },
-        // ... 더 많은 뉴스 항목
-    ];
-
-    displayNews(mockNewsData);
+    // 예시 데이터 사용
+    allNews = mockNewsData;
+    displayNews(allNews.slice(0, currentDisplayCount));
+    updateToggleButton();
 }
-
-// function loadRecentNews() {
-//     // 실제로는 서버에서 JSON을 받아오는 API 호출이 필요합니다.
-//     // 여기서는 예시 데이터를 사용합니다.
-//     fetch('/api/recent-news')
-//         .then(response => response.json())
-//         .then(data => {
-//             allNews = data; // 받아온 모든 뉴스 데이터 저장
-//             displayNews(allNews.slice(0, currentDisplayCount)); // 처음 5개만 표시
-//             updateToggleButton();
-//         })
-//         .catch(error => {
-//             console.error('뉴스를 불러오는 데 실패했습니다:', error);
-//         });
-// }
 
 function displayNews(newsToShow) {
     const newsContainer = document.getElementById('news-history');
-    newsContainer.innerHTML = ''; // 기존 내용을 비웁니다.
+    newsContainer.innerHTML = '';
 
     newsToShow.forEach(news => {
         const newsElement = document.createElement('div');
@@ -121,18 +122,15 @@ function toggleNewsDisplay() {
     const toggleButton = document.querySelector('.show-more');
     
     if (currentDisplayCount < allNews.length) {
-        // 더 보기
         currentDisplayCount = Math.min(currentDisplayCount + 5, allNews.length);
         displayNews(allNews.slice(0, currentDisplayCount));
     } else {
-        // 접기
         currentDisplayCount = 5;
         displayNews(allNews.slice(0, currentDisplayCount));
     }
     
     updateToggleButton();
 }
-
 
 function updateToggleButton() {
     const toggleButton = document.querySelector('.show-more');
@@ -143,29 +141,24 @@ function updateToggleButton() {
         toggleButton.textContent = '더보기';
     }
 
-    // 총 뉴스 개수가 5개 이하면 버튼 숨기기
     toggleButton.style.display = allNews.length <= 5 ? 'none' : 'block';
 }
 
-// function toggleNewsDisplay() {
-//     const toggleButton = document.querySelector('.show-more');
-    
-//     if (currentDisplayCount < allNews.length) {
-//         // 더 보기
-//         currentDisplayCount = Math.min(currentDisplayCount + 5, allNews.length);
-//         displayNews(allNews.slice(0, currentDisplayCount));
-//     } else {
-//         // 접기
-//         currentDisplayCount = 5;
-//         displayNews(allNews.slice(0, currentDisplayCount));
-//     }
-    
-//     updateToggleButton();
-// }
+// main.js 파일의 끝부분에 추가
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
 
-// function loadMoreHistory() {
-//     // 여기에 추가 뉴스를 로드하는 로직을 구현합니다.
-//     // 실제로는 서버에 추가 데이터를 요청하고 받아와야 합니다.
-//     console.log('추가 뉴스 로드');
-//     alert('추가 뉴스를 로드합니다.');
-// }
+    searchButton.addEventListener('click', function() {
+        const keyword = searchInput.value.trim();
+        if (keyword) {
+            window.location.href = `search-results.html?q=${encodeURIComponent(keyword)}`;
+        }
+    });
+
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchButton.click();
+        }
+    });
+});

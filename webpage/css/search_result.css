@@ -1,0 +1,46 @@
+.search-results {
+    margin-top: 20px;
+}
+
+.search-result-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: box-shadow 0.3s ease;
+}
+
+.search-result-item:hover {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-result-item h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.search-result-item p {
+    margin: 10px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.search-result-item .news-outlet {
+    font-weight: bold;
+    color: #0066cc;
+    font-size: 12px;
+}
+
+.search-result-item .keywords {
+    font-style: italic;
+    color: #888;
+    font-size: 12px;
+}
+
+.search-result-item .published-date {
+    color: #999;
+    font-size: 12px;
+}

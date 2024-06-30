@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>검색 결과 - Keyword Ranking News</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/search_result.css">
+</head>
+<body>
+    <div class="container">
+        <h1>검색 결과</h1>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="검색어를 입력하세요">
+            <button id="search-button">검색</button>
+        </div>
+
+        <div class="search-results">
+            <h2>검색 결과: <span id="search-keyword"></span></h2>
+            <div id="search-results-list"></div>
+        </div>
+    </div>
+    <script src="../javascript/search_result.js"></script>
+</body>
+</html>
