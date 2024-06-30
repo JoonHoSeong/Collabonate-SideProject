@@ -1,10 +1,8 @@
 import asyncio
 from playwright.async_api import async_playwright
 from datetime import datetime
-import csv
 import os
 import time
-import pandas as pd
 import psycopg2
 import datetime
 from keywordnews.categories.models import DetailCategory  # 실제 DetailCategory 모델을 import 해야 함

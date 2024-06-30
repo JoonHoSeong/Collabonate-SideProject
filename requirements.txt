@@ -2,4 +2,4 @@ django>=5.0.1,<6.0.0 # 5.0.1 이상 6.0.0 미만
 djangorestframework>=3.14.0,<4.0.0
 psycopg2-binary>=2.9.9,<3.0.0
 sqlalchemy == 2.0.30
-# playwright == 1.44.0
+playwright == 1.44.0
