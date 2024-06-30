@@ -1,0 +1,27 @@
+/* main.css */
+.container {
+    width: 80%;
+    margin: auto;
+}
+
+.news-content {
+    margin-top: 20px;
+}
+
+.comment-section {
+    margin-top: 40px;
+}
+
+.comments {
+    margin-top: 20px;
+}
+
+.comment-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.comment-input {
+    margin-top: 20px;
+}
