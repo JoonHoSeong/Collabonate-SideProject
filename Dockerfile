@@ -10,11 +10,28 @@ LABEL maintainer="joonhoseong"
 # 이는 Docker 컨테이너에서 로그를 더 쉽게 볼 수 있게 합니다.
 ENV PYTHONUNBUFFERED 1
 
+# 필수 패키지 설치
+RUN apk update && apk add --no-cache \
+    postgresql-client \
+    jpeg-dev \
+    zlib-dev \
+    linux-headers \
+    build-base \
+    postgresql-dev \
+    musl-dev
+
+# Node.js 및 npm 설치
+RUN apk add --no-cache nodejs npm
+
+# npm을 사용하여 Playwright 설치
+RUN npm install -g playwright
+
 # 로컬 파일 시스템의 requirements.txt 파일을 컨테이너의 /tmp/requirements.txt로 복사합니다. 
 # 이 파일은 필요한 Python 패키지들을 명시합니다.
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./keywordnews /app
+COPY scrapping_code.py /app/scrapping_code.py
 
 WORKDIR /app
 EXPOSE 8000
@@ -39,5 +56,8 @@ RUN python -m venv /py && \
         django-user
 
 ENV PATH="/py/bin:$PATH"
+
+# 애플리케이션 실행 명령어
+CMD ["python", "scrapping_code.py"]
 
 USER django-user

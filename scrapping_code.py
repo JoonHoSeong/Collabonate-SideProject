@@ -1,10 +1,8 @@
 import asyncio
 from playwright.async_api import async_playwright
 from datetime import datetime
-import csv
 import os
 import time
-import pandas as pd
 import psycopg2
 import datetime
 from keywordnews.categories.models import DetailCategory  # 실제 DetailCategory 모델을 import 해야 함
@@ -26,6 +24,29 @@ def get_detail_category_id(category_name):
         return detail_category.id
     except DetailCategory.DoesNotExist:
         return None
+    
+    
+# 스크랩했던 기사 링크 읽어오기
+def read_scraped_urls(folder_path, today_date, category):
+    file_path = os.path.join(folder_path, f"{today_date}_{category}_SCRAPED_URLS_FILE")
+    if not os.path.exists(file_path):
+        return set()
+    with open(file_path, "r") as file:
+        return set(line.strip() for line in file)
+
+
+# 스크랩한 기사 목록 쓰기
+def write_scraped_url(url, folder_path, today_date, category):
+    file_path = os.path.join(folder_path, f"{today_date}_{category}_SCRAPED_URLS_FILE")
+    with open(file_path, "a") as file:
+        file.write(f"{url}\n")
+        
+# 오늘 날짜와 요일을 구하는 함수
+def get_today_date_and_weekday():
+    now = datetime.now()
+    today_date = now.strftime('%Y-%m-%d')
+    weekday = (now.weekday() + 1) % 7  # 일요일:0 ~ 토요일:6
+    return today_date, weekday
 
 
 def insert_data(conn, table_name, data):
@@ -107,27 +128,6 @@ async def main():
         
             category_detail_cleaned = [cat.replace('/', ' ') for cat in category_detail_text]
 
-            # 스크랩했던 기사 링크 읽어오기
-            def read_scraped_urls():
-                file_path = os.path.join(folder_path, f"{today_date}_{category_filename}_SCRAPED_URLS_FILE")
-                if not os.path.exists(file_path):
-                    return set()
-                with open(file_path, "r") as file:
-                    return set(line.strip() for line in file)
-
-
-            # 스크랩한 기사 목록 쓰기
-            def write_scraped_url(url):
-                file_path = os.path.join(folder_path, f"{today_date}_{category_filename}_SCRAPED_URLS_FILE")
-                with open(file_path, "a") as file:
-                    file.write(f"{url}\n")
-                    
-            # 오늘 날짜와 요일을 구하는 함수
-            def get_today_date_and_weekday():
-                now = datetime.now()
-                today_date = now.strftime('%Y-%m-%d')
-                weekday = (now.weekday() + 1) % 7  # 일요일:0 ~ 토요일:6
-                return today_date, weekday
 
             # for loop for each category
             for i in range(len(category_detail_url)):
@@ -167,54 +167,56 @@ async def main():
                 urls = await page.eval_on_selector_all('a.sa_text_title', 'elements => elements.map(element => element.href)')
                 
                 for url in urls:
-                    if url not in scraped_urls:
+                    if url in scraped_urls:
+                        break
+                        
+
+                    try:
                         await page.goto(url)
+                        # # wait for the 'article' tag to be loaded
+                        # await page.wait_for_selector('article')
+
+                        # # extract content from the 'article' tag
+                        # content = await page.text_content('article')
 
                         try:
-                            # wait for the 'article' tag to be loaded
-                            await page.wait_for_selector('article')
+                            date = await page.locator('span._ARTICLE_DATE_TIME').all_inner_texts()
+                        except Exception:
+                            date = "N/A"
 
-                            # extract content from the 'article' tag
-                            content = await page.text_content('article')
+                        try:
+                            title = await page.locator('h2.media_end_head_headline').all_inner_texts()
+                        except Exception:
+                            title = "N/A"
 
-                            try:
-                                date = await page.locator('span._ARTICLE_DATE_TIME').all_inner_texts()
-                            except Exception:
-                                date = "N/A"
+                        try:
+                            media = await page.locator('em.media_end_linked_more_point').all_inner_texts()
+                        except Exception:
+                            media = "N/A"
 
-                            try:
-                                title = await page.locator('h2.media_end_head_headline').all_inner_texts()
-                            except Exception:
-                                title = "N/A"
+                        try:
+                            thumbnail_link = await page.get_attribute('img._LAZY_LOADING', 'src')
+                        except Exception:
+                            thumbnail_link = "N/A"
 
-                            try:
-                                media = await page.locator('em.media_end_linked_more_point').all_inner_texts()
-                            except Exception:
-                                media = "N/A"
+                        data = {
+                            'detail_category': detail_category,
+                            'title': title,
+                            'publication_date': date,
+                            'summary': content,
+                            'media': media,
+                            'link': url,
+                            'thumbnail': thumbnail_link
+                        }
+                        
+                        
+                        # 데이터베이스에 삽입 테이블:News
+                        insert_data(conn,"News", data)
+                        
+                        write_scraped_url(url)
 
-                            try:
-                                thumbnail_link = await page.get_attribute('img._LAZY_LOADING', 'src')
-                            except Exception:
-                                thumbnail_link = "N/A"
-
-                            data = {
-                                'detail_category': detail_category,
-                                'title': title,
-                                'publication_date': date,
-                                'summary': content,
-                                'media': media,
-                                'link': url,
-                                'thumbnail': thumbnail_link
-                            }
-                            
-                            
-                            # 데이터베이스에 삽입 테이블:News
-                            insert_data(conn,"News", data)
-                            
-                            write_scraped_url(url)
-
-                        except Exception as e:
-                            print(f"Error occurred while scraping {url}: {str(e)}")
+                    except Exception as e:
+                        print(f"Error occurred while scraping {url}: {str(e)}")
                     
                 print(f"{len(urls)}개 데이터 수집 완료")
                     
