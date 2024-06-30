@@ -28,8 +28,6 @@ services:
       - POSTGRES_DB=keywordnews
       - POSTGRES_USER=joonhoseong
       - POSTGRES_PASSWORD=password123
-# volumes:
-#   postgres_data : 
 
   scraper: # Scraping Service
     build:
@@ -43,3 +41,6 @@ services:
       - DB_PORT=5432
     depends_on:
       - db
+
+volumes:
+  postgres_data : 
