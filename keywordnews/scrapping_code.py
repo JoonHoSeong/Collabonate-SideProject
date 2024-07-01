@@ -4,7 +4,6 @@ from datetime import datetime
 import os
 import time
 import psycopg2
-import datetime
 
 import django
 
@@ -113,8 +112,8 @@ async def main():
     async with async_playwright() as playwright:
         
         current_time = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-        output_dir = './output'
-        os.makedirs(output_dir, exist_ok=True)
+        # output_dir = './output'
+        # os.makedirs(output_dir, exist_ok=True)
         
         folder_path = "scraped_urls"
 
