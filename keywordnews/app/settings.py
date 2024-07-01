@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-CUSTOM_APPS = ["admin_user", "core", "categories", "newses", "users", "comments"]
+CUSTOM_APPS = ["admin_user", "core", "categories", "newses", "users", "comments",]
 DEFAULT_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",

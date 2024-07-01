@@ -5,7 +5,34 @@ import os
 import time
 import psycopg2
 import datetime
-from categories.models import DetailCategory  # 실제 DetailCategory 모델을 import 해야 함
+
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
+django.setup()
+
+# 데이터베이스가 준비될 때까지 대기
+db_ready = False
+while not db_ready:
+    try:
+        conn = psycopg2.connect(
+            dbname=os.environ['DB_NAME'],
+            user=os.environ['DB_USER'],
+            password=os.environ['DB_PASSWORD'],
+            host=os.environ['DB_HOST'],
+            port=os.environ['DB_PORT']
+        )
+        conn.close()
+        db_ready = True
+    except psycopg2.OperationalError:
+        print("Database not ready, waiting...")
+        time.sleep(5)
+
+from categories.models import DetailCategory
+
+print("DetailCategory imported")
+# 이하 스크래핑 코드 작성
+
 
 def connect_to_db():
     conn = psycopg2.connect(

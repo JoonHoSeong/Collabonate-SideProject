@@ -39,8 +39,12 @@ services:
       - DB_PASSWORD=password123
       - DB_HOST=db
       - DB_PORT=5432
+      - DJANGO_SETTINGS_MODULE=app.settings
+      - PYTHONPATH=/app    
     depends_on:
       - db
+      - app
+    entrypoint: ["python", "/app/scrapping_code.py"]
 
 volumes:
   postgres_data : 
