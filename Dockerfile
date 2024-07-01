@@ -21,7 +21,6 @@ EXPOSE 8000
 
 ARG DEV=false
 
-
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     # apk add --update --no-cache postgresql-client jpeg-dev && \
@@ -31,37 +30,43 @@ RUN python -m venv /py && \
     if [ $DEV = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
-    # # Playwright 설치 부분 추가
-    # apk add --no-cache \
-    #     gcc \
-    #     g++ \
-    #     libffi-dev \
-    #     openssl-dev \
-    #     libxml2-dev \
-    #     libxslt-dev \
-    #     pcre-dev \
-    #     jpeg-dev \
-    #     zlib-dev \
-    #     freetype-dev \
-    #     lcms2-dev \
-    #     openjpeg-dev \
-    #     tiff-dev \
-    #     glib-dev \
-    #     eudev-dev \
-    #     ffmpeg-dev \
-    # && /py/bin/pip install --no-cache-dir \
-    #     playwright \
-    #     pytest-playwright \
-    # && playwright install && \
-    rm -rf /tmp && \
-    # apk del .tmp-build-deps && \
+    rm -rf /tmp && \ 
     adduser \
         --disabled-password \
         --no-create-home \
         django-user
 
+# Playwright 설치
+RUN /py/bin/python -m pip install playwright
 
+# /tmp 디렉토리 생성 및 권한 설정
+RUN mkdir -p /tmp && chmod 1777 /tmp
+
+# Playwright 브라우저 다운로드
+RUN mkdir -p /home/django-user/.cache/ms-playwright && \
+    PLAYWRIGHT_BROWSERS_PATH=/home/django-user/.cache/ms-playwright /py/bin/python -m playwright install
+
+# 환경 변수 설정
 ENV PATH="/py/bin:$PATH"
+
+# /var/tmp 디렉토리 생성 및 권한 설정
+RUN mkdir -p /var/tmp && chmod 1777 /var/tmp
+
+# 필요한 추가 패키지 설치
+RUN apt-get update && apt-get install -y \
+    libnss3 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libxkbcommon0 \
+    libgbm1 \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libasound2 \
+    libxrandr2 \
+    libgtk-3-0 \
+    libxshmfence1
+
 
 CMD ["python","/app/scrapping_code.py"]
 

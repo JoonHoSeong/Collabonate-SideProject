@@ -52,20 +52,20 @@ def get_detail_category_id(category_name):
         return None
     
     
-# 스크랩했던 기사 링크 읽어오기
-def read_scraped_urls(folder_path, today_date, category):
-    file_path = os.path.join(folder_path, f"{today_date}_{category}_SCRAPED_URLS_FILE")
-    if not os.path.exists(file_path):
-        return set()
-    with open(file_path, "r") as file:
-        return set(line.strip() for line in file)
+# # 스크랩했던 기사 링크 읽어오기
+# def read_scraped_urls(folder_path, today_date, category):
+#     file_path = os.path.join(folder_path, f"{today_date}_{category}_SCRAPED_URLS_FILE")
+#     if not os.path.exists(file_path):
+#         return set()
+#     with open(file_path, "r") as file:
+#         return set(line.strip() for line in file)
 
 
-# 스크랩한 기사 목록 쓰기
-def write_scraped_url(url, folder_path, today_date, category):
-    file_path = os.path.join(folder_path, f"{today_date}_{category}_SCRAPED_URLS_FILE")
-    with open(file_path, "a") as file:
-        file.write(f"{url}\n")
+# # 스크랩한 기사 목록 쓰기
+# def write_scraped_url(url, folder_path, today_date, category):
+#     file_path = os.path.join(folder_path, f"{today_date}_{category}_SCRAPED_URLS_FILE")
+#     with open(file_path, "a") as file:
+#         file.write(f"{url}\n")
         
 # 오늘 날짜와 요일을 구하는 함수
 def get_today_date_and_weekday():
@@ -115,14 +115,14 @@ async def main():
         # output_dir = './output'
         # os.makedirs(output_dir, exist_ok=True)
         
-        folder_path = "scraped_urls"
+        # folder_path = "scraped_urls"
 
-        # Ensure the folder exists; create if it doesn't
-        if not os.path.exists(folder_path):
-            os.makedirs(folder_path)
+        # # Ensure the folder exists; create if it doesn't
+        # if not os.path.exists(folder_path):
+        #     os.makedirs(folder_path)
 
         # launch a browser with headless mode to scrape data
-        browser = await playwright.chromium.launch(headless=False)
+        browser = await playwright.chromium.launch(headless=True)
 
         # create a new page
         page = await browser.new_page()
@@ -173,7 +173,7 @@ async def main():
 
                 today_date, weekday = get_today_date_and_weekday()
                 
-                scraped_urls = read_scraped_urls(folder_path, today_date, category)
+                # scraped_urls = read_scraped_urls(folder_path, today_date, category)
             
                 # 오늘 날짜 페이지로 이동
                 await page.click(".section_title_btn.is_closed._CALENDAR_LAYER_TOGGLE")
@@ -193,8 +193,8 @@ async def main():
                 urls = await page.eval_on_selector_all('a.sa_text_title', 'elements => elements.map(element => element.href)')
                 
                 for url in urls:
-                    if url in scraped_urls:
-                        break
+                    # if url in scraped_urls:
+                    #     break
                         
 
                     try:
@@ -239,7 +239,7 @@ async def main():
                         # 데이터베이스에 삽입 테이블:News
                         insert_data(conn,"News", data)
                         
-                        write_scraped_url(url, folder_path, today_date, category)
+                        # write_scraped_url(url, folder_path, today_date, category)
 
                     except Exception as e:
                         print(f"Error occurred while scraping {url}: {str(e)}")
