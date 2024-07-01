@@ -52,7 +52,7 @@ ENV PATH="/py/bin:$PATH"
 # /var/tmp 디렉토리 생성 및 권한 설정
 RUN mkdir -p /var/tmp && chmod 1777 /var/tmp
 
-# 필요한 추가 패키지 설치
+# 필요한 추가 패키지 설치 Headless True
 RUN apt-get update && apt-get install -y \
     libnss3 \
     libatk1.0-0 \
@@ -68,6 +68,6 @@ RUN apt-get update && apt-get install -y \
     libxshmfence1
 
 
-CMD ["python","/app/scrapping_code.py"]
+CMD ["python","/app/scrapping_code.py"] 
 
 USER django-user

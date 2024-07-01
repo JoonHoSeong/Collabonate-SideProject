@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 import time
 import psycopg2
+from asgiref.sync import sync_to_async
 
 import django
 
@@ -105,7 +106,9 @@ def insert_data(conn, table_name, data):
     except Exception as e:
         print(f"Error occurred while saving to database: {str(e)}")
 
-
+# 비동기 함수 내에서 동기 코드 호출하기
+async def async_insert_data(conn, table_name, data):
+    await sync_to_async(insert_data)(conn, table_name, data)
 
 
 async def main():
@@ -134,6 +137,8 @@ async def main():
         
         await page.goto(url)
         
+        print("메인페이지 이동", flush=True)
+        
         # 상단에 메인 카테고리 정보 가져오기 -> 우리가 사용할 카테고리는 "정치"~"세계"까지만([1]~[6])
         category_urls = await page.eval_on_selector_all('.Nitem_link', 'elements => elements.map(element => element.href)')
         category_urls_use = category_urls[1:7]
@@ -143,10 +148,14 @@ async def main():
             
             await page.goto(category_urls_use[i])
             
+            print("메인카테고리 이동", flush=True)
+            
             # 메인 카테고리 데이터 수집
             category_main = await page.locator('.ct_snb_h2_a').all_inner_texts()
             category_main_text = category_main[0]
             category_main_cleaned = category_main_text.replace('/', ' ')
+            
+            print(category_main_cleaned, flush=True)
             
             # 세부 카테고리 데이터 수집
             category_detail_url = await page.eval_on_selector_all('.ct_snb_nav_item_link', 'elements => elements.map(element => element.href)')
@@ -154,6 +163,7 @@ async def main():
         
             category_detail_cleaned = [cat.replace('/', ' ') for cat in category_detail_text]
 
+            print(category_detail_cleaned, flush=True)
 
             # for loop for each category
             for i in range(len(category_detail_url)):
@@ -165,17 +175,20 @@ async def main():
                 category = f"{category_main_cleaned}_{category_detail_cleaned[i]}"
                 
                 
-                print("--------------------------------------------")
-                print(f"{current_time} : 데이터 수집 시작")
-                print("카테고리 :", category)
+                print("--------------------------------------------", flush=True)
+                print(f"{current_time} : 데이터 수집 시작", flush=True)
+                print("카테고리 :", category, flush=True)
                 
                 await page.goto(category_detail_url[i])
 
                 today_date, weekday = get_today_date_and_weekday()
                 
                 # scraped_urls = read_scraped_urls(folder_path, today_date, category)
-            
+
+                
                 # 오늘 날짜 페이지로 이동
+                await page.wait_for_load_state('networkidle')
+                await page.wait_for_selector(".section_title_btn.is_closed._CALENDAR_LAYER_TOGGLE", timeout=60000)
                 await page.click(".section_title_btn.is_closed._CALENDAR_LAYER_TOGGLE")
                 # 페이지가 완전히 로드될 때까지 기다립니다.
                 await page.wait_for_load_state('networkidle')
@@ -187,12 +200,13 @@ async def main():
                 except Exception as e:
                     print(f"An error occurred: {e}")
                 
+                
                 # "더보기" 버튼 누르기
                 while True:
                     try:
                         load_more_button = await page.wait_for_selector(".section_more_inner._CONTENT_LIST_LOAD_MORE_BUTTON", timeout=10000)
                         await load_more_button.click()
-                        await page.wait_for_timeout(100)
+                        await page.wait_for_timeout(60000)
                     except Exception as e:
                         print("더 이상 기사가 없습니다")
                         break
@@ -246,7 +260,8 @@ async def main():
                         
                         
                         # 데이터베이스에 삽입 테이블:News
-                        insert_data(conn,"News", data)
+                        await async_insert_data(conn, "News", data)
+
                         
                         # write_scraped_url(url, folder_path, today_date, category)
 
