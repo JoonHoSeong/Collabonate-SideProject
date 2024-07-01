@@ -177,8 +177,15 @@ async def main():
             
                 # 오늘 날짜 페이지로 이동
                 await page.click(".section_title_btn.is_closed._CALENDAR_LAYER_TOGGLE")
+                # 페이지가 완전히 로드될 때까지 기다립니다.
+                await page.wait_for_load_state('networkidle')
                 css_selector = f".day.is_today.is_selected.calendar-day-{today_date}.calendar-dow-{weekday}"
-                await page.click(css_selector)
+                # 요소가 나타날 때까지 기다립니다.
+                try:
+                    await page.wait_for_selector(css_selector, timeout=60000)
+                    await page.click(css_selector)
+                except Exception as e:
+                    print(f"An error occurred: {e}")
                 
                 # "더보기" 버튼 누르기
                 while True:
@@ -234,6 +241,8 @@ async def main():
                             'link': url,
                             'thumbnail': thumbnail_link
                         }
+                        
+                        print(data)
                         
                         
                         # 데이터베이스에 삽입 테이블:News
