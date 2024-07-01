@@ -1,6 +1,6 @@
 #  Python 3.11이 설치된 Alpine Linux 3.19
 # Alpine Linux는 경량화된 리눅스 배포판으로, 컨테이너 환경에 적합
-FROM python:3.11-alpine3.19
+FROM python:3.11
 
 # LABEL 명령어는 이미지에 메타데이터를 추가합니다. 여기서는 이미지의 유지 관리자를 "joonhoseong"로 지정하고 있습니다.
 LABEL maintainer="joonhoseong"
@@ -39,25 +39,47 @@ EXPOSE 8000
 ARG DEV=false
 
 
-RUN python -m venv /py && \ 
+RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
-    apk add --update --no-cache postgresql-client jpeg-dev && \
-    apk add --update --no-cache --virtual .tmp-build-deps \
-        build-base postgresql-dev musl-dev zlib zlib-dev linux-headers && \
+    # apk add --update --no-cache postgresql-client jpeg-dev && \
+    # apk add --update --no-cache --virtual .tmp-build-deps \
+    #     build-base postgresql-dev musl-dev zlib zlib-dev linux-headers && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
+    # # Playwright 설치 부분 추가
+    # apk add --no-cache \
+    #     gcc \
+    #     g++ \
+    #     libffi-dev \
+    #     openssl-dev \
+    #     libxml2-dev \
+    #     libxslt-dev \
+    #     pcre-dev \
+    #     jpeg-dev \
+    #     zlib-dev \
+    #     freetype-dev \
+    #     lcms2-dev \
+    #     openjpeg-dev \
+    #     tiff-dev \
+    #     glib-dev \
+    #     eudev-dev \
+    #     ffmpeg-dev \
+    # && /py/bin/pip install --no-cache-dir \
+    #     playwright \
+    #     pytest-playwright \
+    # && playwright install && \
     rm -rf /tmp && \
-    apk del .tmp-build-deps && \
+    # apk del .tmp-build-deps && \
     adduser \
         --disabled-password \
         --no-create-home \
         django-user
 
+
 ENV PATH="/py/bin:$PATH"
 
-# 애플리케이션 실행 명령어
-CMD ["python", "scrapping_code.py"]
+CMD ["python","/app/scrapping_code.py"]
 
 USER django-user
