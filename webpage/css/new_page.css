@@ -1,27 +1,96 @@
-/* main.css */
-.container {
-    width: 80%;
-    margin: auto;
-}
-
-.news-content {
+/* 전체 컨테이너 스타일 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #007bff;
+  }
+  
+  /* 뉴스 기사 스타일 */
+  #news-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .news-item {
+    margin-bottom: 20px;
+  }
+  
+  .news-item h3 {
+    color: #007bff;
+    margin-bottom: 5px;
+  }
+  
+  .news-item p {
+    line-height: 1.6;
+  }
+  
+  /* 댓글 섹션 스타일 */
+  .comments-section {
     margin-top: 20px;
-}
-
-.comment-section {
-    margin-top: 40px;
-}
-
-.comments {
-    margin-top: 20px;
-}
-
-.comment-card {
+    padding: 20px;
     border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .comment-input-container {
+    display: flex; /* 댓글 입력창과 버튼을 옆으로 배치 */
+  }
+  
+  #comment-input {
+    flex-grow: 1; /* 입력창이 남은 공간을 모두 차지하도록 설정 */
+    margin-right: 10px; /* 입력창과 버튼 사이 간격 */
+    height: 100px;
     padding: 10px;
+    resize: none;
+    overflow: auto;
+  }
+  
+  #comment-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px; /* 버튼 패딩 추가 */
+  }
+  
+  #comment-button:disabled {
+    background-color: #ddd;
+    cursor: default;
+  }
+  
+  #comment-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  #comment-list li {
     margin-bottom: 10px;
-}
-
-.comment-input {
-    margin-top: 20px;
-}
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .reply-form {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .reply-form.hidden {
+    display: none;
+  }
+  

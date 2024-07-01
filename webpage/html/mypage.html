@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지 - Keyword Ranking News</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/mypage.css">
+</head>
+<body>
+    <div class="container">
+        <h1>마이페이지</h1>
+        <div class="profile-section">
+            <h2>프로필 정보</h2>
+            <div class="profile-image-container">
+                <img src="https://via.placeholder.com/150" alt="프로필 이미지" id="profile-image">
+                <input type="file" id="image-upload" accept="image/*">
+                <label for="image-upload" class="upload-button">이미지 업로드</label>
+            </div>
+            <div class="profile-info">
+                <div class="form-group">
+                    <label for="nickname">닉네임</label>
+                    <input type="text" id="nickname" name="nickname" value="현재 닉네임">
+                    <button id="change-nickname">변경</button>
+                </div>
+                <div class="form-group">
+                    <label for="current-password">현재 비밀번호</label>
+                    <input type="password" id="current-password" name="current-password">
+                </div>
+                <div class="form-group">
+                    <label for="new-password">새 비밀번호</label>
+                    <input type="password" id="new-password" name="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">비밀번호 확인</label>
+                    <input type="password" id="confirm-password" name="confirm-password">
+                </div>
+                <button id="change-password">비밀번호 변경</button>
+            </div>
+        </div>
+        
+        <div class="history-section">
+            <h2>최근 본 뉴스</h2>
+            <div id="news-history" class="news-list">
+                <!-- 최근 본 뉴스 항목들이 여기에 동적으로 추가됩니다 -->
+            </div>
+            <button class="show-more" onclick="loadMoreHistory()">더 보기</button>
+        </div>
+    </div>
+    <script src="../javascript/mypage.js"></script>
+</body>
+</html>

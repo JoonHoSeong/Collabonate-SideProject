@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Detail Page</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="../css/main.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyword Ranking News</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="../css/new_page.css">
 </head>
 <body>
-    <div class="container">
-        <h1 id="news-title">News Title</h1>
-        <img id="news-thumbnail" src="" alt="News Thumbnail">
-        <div id="news-content" class="news-content">
-            <!-- 뉴스 내용은 여기에 들어갑니다 -->
-        </div>
-        <div class="comment-section">
-            <h2>댓글</h2>
-            <div id="comments" class="comments">
-                <!-- 댓글은 여기에 들어갑니다 -->
-            </div>
-            <div class="comment-input">
-                <input type="text" id="comment-input" placeholder="댓글을 입력하세요">
-                <button id="comment-button">댓글 달기</button>
-            </div>
-        </div>
+  <div class="container">
+    <h1>Keyword Ranking News</h1>
+    <div class="search-container">
+      </div>
+
+    <div id="news-container">
+      </div>
+
+    <div class="comments-section">
+      <h2>댓글</h2>
+      <div class="comment-input-container">
+        <textarea id="comment-input" placeholder="댓글을 입력하세요" disabled></textarea>
+        <button id="comment-button" disabled>댓글 작성</button> 
+      </div>
+      <div id="comment-list"></div>
     </div>
-    <script src="../javascript/main.js"></script>
+  </div>
+  <script src="../javascript/news_page.js"></script>
 </body>
 </html>
